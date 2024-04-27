@@ -1,6 +1,10 @@
 # PyTorch-DAGMM-Variants
 
-References from:  [Deep Autoencoding Gaussian Mixture Model for Unsupervised Anomaly Detection](https://openreview.net/forum?id=BJJLHbb0-) (DAGMM, ICLR 2018)
+## References from:  [Deep Autoencoding Gaussian Mixture Model for Unsupervised Anomaly Detection](https://openreview.net/forum?id=BJJLHbb0-) (DAGMM, ICLR 2018)
+
+
+## Reference additional code: [PyTorch-DAGMM](https://github.com/mperezcarrasco/PyTorch-DAGMM)
+
 
 ### 1.  what we did: 
 
@@ -16,4 +20,3 @@ Bo Zong, Qi Song, Martin Renqiang Min, Wei Cheng, Cristian Lumezanu, Daeki Cho, 
 Varun Chandola, Arindam Banerjee, and Vipin Kumar. 2009. Anomaly detection: A survey. ACM Comput. Surv. 41, 3, Article 15 (July 2009), 58 pages. DOI: 10.1145/1541880.1541882.
 
 ### 3. Methonology
-
