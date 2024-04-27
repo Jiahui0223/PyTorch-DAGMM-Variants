@@ -1,0 +1,75 @@
+# code based on https://github.com/danieltan07
+
+from load_data import *
+from train import *
+from model import *
+from test import *
+
+
+import numpy as np
+import argparse 
+import torch
+
+from train import TrainerDAGMM
+from test import eval
+from preprocess import get_KDDCup99
+
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--num_epochs", type=int, default=200,
+                        help="number of epochs")
+    parser.add_argument("--patience", type=int, default=50, 
+                        help="Patience for Early Stopping")
+    parser.add_argument('--lr', type=float, default=1e-4,
+                        help='learning rate')
+    parser.add_argument('--lr_milestones', type=list, default=[50],
+                        help='Milestones at which the scheduler multiply the lr by 0.1')
+    parser.add_argument("--batch_size", type=int, default=1024, 
+                        help="Batch size")
+    parser.add_argument('--latent_dim', type=int, default=1,
+                        help='Dimension of the latent variable z')
+    parser.add_argument('--n_gmm', type=int, default=4,
+                        help='Number of Gaussian components ')
+    parser.add_argument('--lambda_energy', type=float, default=0.1,
+                        help='Parameter labda1 for the relative importance of sampling energy.')
+    parser.add_argument('--lambda_cov', type=int, default=0.005,
+                        help='Parameter lambda2 for penalizing small values on'
+                             'the diagonal of the covariance matrix')
+    #Jiahui
+    parser.add_argument('--lambda_recon', type=float, default=1.0,
+                        help='Weight for the reconstruction loss in the VAE.')
+    parser.add_argument('--lambda_kl', type=float, default=0.01,
+                        help='Weight for the KL divergence loss in the VAE.')
+    parser.add_argument('--model', type=str, default='ae',
+                        help='Choices: ae OR vae OR betavae')
+    parser.add_argument('--dataset', type=str, default='kdd',
+                        help='Choices: kdd OR cicids')
+    #parsing arguments.
+    args = parser.parse_args() 
+
+    #check if cuda is available.
+    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+
+    # Get train and test dataloaders.
+    # data = get_KDDCup99(args)
+    data = Get_Data(args)
+    print(f"data = {data}")
+    
+    if args.model == 'ae':
+        AE = TrainerAE(args, data, device)
+        AE.train()
+        print(f"ae")
+        labels, scores, precision, recall, f_score = evalAE(AE.model, data, device)
+        # plot_metrics(labels, scores)
+    elif args.model == 'vae':
+        pass
+    # DAGMM = TrainerDAGMM(args, data, device)
+    # DAGMM.train()
+    # DAGMM.eval(DAGMM.model, data, device) # data[1]: test dataloader
+    
+    # labels, scores = eval(DAGMM.model, data, device, args.n_gmm)
+
+
+    # BetaVAE
